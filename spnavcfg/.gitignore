@@ -1,0 +1,9 @@
+*.o
+*.d
+*.swp
+Makefile
+spnavcfg
+ui_mainwin.h
+ui_bnmaprow.h
+ui_about.h
+res.cc

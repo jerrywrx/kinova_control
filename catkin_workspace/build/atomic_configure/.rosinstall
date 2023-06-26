@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/jerrywang/spa/catkin_workspace/devel/setup.sh
