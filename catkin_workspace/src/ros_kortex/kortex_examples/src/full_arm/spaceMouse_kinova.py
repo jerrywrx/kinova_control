@@ -52,8 +52,7 @@ class SpacemouseToKinova:
         rospy.Subscriber("spacemouse_state/grasp", Float64, self.spacemouse_grasp_callback)
 
     def spacemouse_linear_x_callback(self, msg):
-        self.cmd.twist.linear_x = -msg.data * 40
-        
+        self.cmd.twist.linear_x = -msg.data * 40        
 
     def spacemouse_linear_y_callback(self, msg):
         self.cmd.twist.linear_y = -msg.data * 40
