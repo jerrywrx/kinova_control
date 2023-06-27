@@ -40,14 +40,14 @@ class SpacemouseToKinova:
         self.pub = rospy.Publisher('/my_gen3/in/cartesian_velocity', TwistCommand, queue_size=10)
 
         # Subscribe to spacemouse linear velocity commands
-        rospy.Subscriber("spacemouse_state/dx", Float64, self.spacemouse_linear_x_callback)
-        rospy.Subscriber("spacemouse_state/dy", Float64, self.spacemouse_linear_y_callback)
-        rospy.Subscriber("spacemouse_state/dz", Float64, self.spacemouse_linear_z_callback)
+        rospy.Subscriber("spacemouse_state/d_linear_x", Float64, self.spacemouse_linear_x_callback)
+        rospy.Subscriber("spacemouse_state/d_linear_y", Float64, self.spacemouse_linear_y_callback)
+        rospy.Subscriber("spacemouse_state/d_linear_z", Float64, self.spacemouse_linear_z_callback)
 
         # Subscribe to spacemouse angular velocity commands
-        rospy.Subscriber("spacemouse_state/dpitch", Float64, self.spacemouse_angular_x_callback)
-        rospy.Subscriber("spacemouse_state/dyaw", Float64, self.spacemouse_angular_y_callback)
-        rospy.Subscriber("spacemouse_state/droll", Float64, self.spacemouse_angular_z_callback)
+        rospy.Subscriber("spacemouse_state/d_angular_x", Float64, self.spacemouse_angular_x_callback)
+        rospy.Subscriber("spacemouse_state/d_angular_y", Float64, self.spacemouse_angular_y_callback)
+        rospy.Subscriber("spacemouse_state/d_angular_z", Float64, self.spacemouse_angular_z_callback)
 
         rospy.Subscriber("spacemouse_state/grasp", Float64, self.spacemouse_grasp_callback)
 
@@ -56,19 +56,18 @@ class SpacemouseToKinova:
 
     def spacemouse_linear_y_callback(self, msg):
         self.cmd.twist.linear_y = -msg.data * 40
-        
 
     def spacemouse_linear_z_callback(self, msg):
-        self.cmd.twist.linear_z = msg.data * 20
+        self.cmd.twist.linear_z = msg.data * 40
 
     def spacemouse_angular_x_callback(self, msg):
-        self.cmd.twist.angular_x = -msg.data * 60
+        self.cmd.twist.angular_x = -msg.data * 80
 
     def spacemouse_angular_y_callback(self, msg):
-        self.cmd.twist.angular_y = -msg.data * 60
+        self.cmd.twist.angular_y = -msg.data * 80
 
     def spacemouse_angular_z_callback(self, msg):
-        self.cmd.twist.angular_z = -msg.data * 60
+        self.cmd.twist.angular_z = -msg.data * 80
 
     def spacemouse_grasp_callback(self, msg):
         self.grasp = msg.data

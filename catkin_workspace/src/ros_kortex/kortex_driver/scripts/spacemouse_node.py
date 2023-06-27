@@ -293,21 +293,30 @@ class SpaceMouse(Device):
             return 1.0
         return 0
 
+class Spacemouse_State:
+    def __init__(self, dx, dy, dz, dyaw, dpitch, droll, grasp, reset) -> None:
+        self.dx = dx
+        self.dy = dy
+        self.dz = dz
+        self.dyaw = dyaw
+        self.dpitch = dpitch
+        self.droll = droll
+        self.grasp = grasp
+        self.reset = reset
 
 def spacemouse_talker():
     rospy.init_node('spacemouse_state_pub', anonymous=False)
     rate = rospy.Rate(10) # 10hz
     
-    pub_dx = rospy.Publisher('spacemouse_state/dx', Float64, queue_size=10)
-    pub_dy = rospy.Publisher('spacemouse_state/dy', Float64, queue_size=10)
-    pub_dz = rospy.Publisher('spacemouse_state/dz', Float64, queue_size=10)
-    pub_dyaw = rospy.Publisher('spacemouse_state/dyaw', Float64, queue_size=10)
-    pub_dpitch = rospy.Publisher('spacemouse_state/dpitch', Float64, queue_size=10)
-    pub_droll = rospy.Publisher('spacemouse_state/droll', Float64, queue_size=10)
+    pub_dx = rospy.Publisher('spacemouse_state/d_linear_x', Float64, queue_size=10)
+    pub_dy = rospy.Publisher('spacemouse_state/d_linear_y', Float64, queue_size=10)
+    pub_dz = rospy.Publisher('spacemouse_state/d_linear_z', Float64, queue_size=10)
+    pub_dpitch = rospy.Publisher('spacemouse_state/d_angular_x', Float64, queue_size=10)
+    pub_dyaw = rospy.Publisher('spacemouse_state/d_angular_y', Float64, queue_size=10)
+    pub_droll = rospy.Publisher('spacemouse_state/d_angular_z', Float64, queue_size=10)
     pub_grasp = rospy.Publisher('spacemouse_state/grasp', Float64, queue_size=10)
     pub_reset = rospy.Publisher('spacemouse_state/reset', Float64, queue_size=10)
 
-    
     while not rospy.is_shutdown():
         # Get current spacemouse state
         state = device.get_controller_state()
