@@ -23,7 +23,9 @@ class WaypointsRecorder:
         self.d_angular_y = 0.0
         self.d_angular_z = 0.0
 
-        self.log_timer = rospy.Timer(rospy.Duration(1), self.save_to_yaml)
+        record_period = float(input("Enter the record period in seconds: "))
+
+        self.log_timer = rospy.Timer(rospy.Duration(record_period), self.save_to_yaml)
 
         curr_time = datetime.now().strftime("%d-%b-%Y-%H:%M:%S.%f")
         self.file_name = "recordings/" + str(curr_time) + ".yaml"
@@ -31,6 +33,8 @@ class WaypointsRecorder:
         # Initialize the YAML file with an empty list
         with open(self.file_name, 'w') as file:
             yaml.dump([], file)
+
+        input("Press Enter to begin recording")
 
         # subscribe to data including joint angles, joint velocities, and tool pose
         rospy.Subscriber('/my_gen3/base_feedback', BaseCyclic_Feedback, self.tool_pose_callback)
@@ -103,5 +107,6 @@ class WaypointsRecorder:
 
 if __name__ == "__main__":
     rospy.init_node("waypoints_recorder")
+    
     recorder = WaypointsRecorder()
     rospy.spin()
