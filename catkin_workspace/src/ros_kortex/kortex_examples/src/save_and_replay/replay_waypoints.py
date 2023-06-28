@@ -16,7 +16,8 @@ import rospy
 import time
 import math
 import yaml
-
+import argparse
+import os
 import actionlib
 
 from kortex_driver.srv import *
@@ -62,6 +63,13 @@ class ExampleWaypointActionClient:
             self.get_product_configuration = rospy.ServiceProxy(get_product_configuration_full_name, GetProductConfiguration)
 
             self.waypoints = []
+
+            # Instantiate the parser
+            self.parser = argparse.ArgumentParser()
+            self.parser.add_argument('opt_pos_arg', type=str, nargs='?',
+                    help='YAML file to be loaded. Default to the last file in the folder.')
+            self.yaml_file = self.parser.parse_args()
+
         except:
             self.is_init_success = False
         else:
@@ -183,18 +191,23 @@ class ExampleWaypointActionClient:
             return True
     
     def read_waypoints(self):
-        # Read waypoints from YAML file
-        filename = "recordings/" + "27-Jun-2023-16:30:16.000286" + ".yaml"
+        dir = 'recordings'
+        files = os.listdir(dir)
+
+        # Sort the files based on their modification timestamps (most recent first)
+        sorted_files = sorted(files, key=lambda x: os.path.getmtime(os.path.join(dir, x)), reverse=True)
+
+        # Get the filename of the most recent file
+        most_recent_file = sorted_files[0]
+
+        if self.yaml_file.opt_pos_arg:
+            # Read waypoints from YAML file
+            filename = "recordings/" + self.yaml_file.opt_pos_arg + ".yaml"
+        else:
+            filename = "recordings/" + most_recent_file
 
         with open(filename, 'r') as file:
             self.waypoints = list(yaml.safe_load_all(file))
-            # Process each document individually
-        
-        # print(self.waypoints)
-
-        # # Print the waypoints
-        # for waypoint in self.waypoints:
-        #     print(waypoint)
 
     def main(self):
         # For testing purposes
