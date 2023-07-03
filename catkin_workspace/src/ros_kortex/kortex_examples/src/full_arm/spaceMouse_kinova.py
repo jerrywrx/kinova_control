@@ -83,7 +83,7 @@ class SpacemouseToKinova:
         rate = rospy.Rate(10)  # 10Hz
 
         with utilities.DeviceConnection.createTcpConnection(args) as router:
-            example = GripperCommandExample(router)
+            # example = GripperCommandExample(router)
             while not rospy.is_shutdown():
                 print("linear_x: ", self.cmd.twist.linear_x)
                 print("linear_y: ", self.cmd.twist.linear_y)
@@ -93,7 +93,7 @@ class SpacemouseToKinova:
                 print("angular_z: ", self.cmd.twist.angular_z)
 
                 self.pub.publish(self.cmd)
-                example.ExampleSendGripperCommands(self.grasp)
+                # example.ExampleSendGripperCommands(self.grasp)
                 print("")
 
                 rate.sleep()

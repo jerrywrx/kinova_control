@@ -80,6 +80,7 @@ class WaypointsRecorder:
         curr_time = datetime.now().strftime("%d-%b-%Y-%H:%M:%S.%f")
 
         data = {
+            "waypoint" : self.waypoint_count,
             "timestamp" : curr_time,
             "linear_x" : self.linear_x,
             "linear_y" : self.linear_y,

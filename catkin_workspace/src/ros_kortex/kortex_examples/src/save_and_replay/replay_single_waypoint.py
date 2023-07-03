@@ -66,8 +66,12 @@ class ExampleWaypointActionClient:
 
             # Instantiate the parser
             self.parser = argparse.ArgumentParser()
+            self.parser.add_argument('pos_arg', type=int,
+                    help='Waypoint number')
+
             self.parser.add_argument('opt_pos_arg', type=str, nargs='?',
                     help='YAML file to be loaded. Default to the last file in the folder.')
+            
             self.yaml_file = self.parser.parse_args()
 
         except:
@@ -171,13 +175,14 @@ class ExampleWaypointActionClient:
             goal.trajectory.append(self.FillCartesianWaypoint(0.350,  0.050,  0.300, math.radians(90.6), math.radians(-1.0), math.radians(150), 0))
         else:
             for waypoint in self.waypoints[1:]:
-                new_x = waypoint["linear_x"]
-                new_y = waypoint["linear_y"]
-                new_z = waypoint["linear_z"]
-                new_theta_x = waypoint["angular_x"]
-                new_theta_y = waypoint["angular_y"]
-                new_theta_z = waypoint["angular_z"]
-                goal.trajectory.append(self.FillCartesianWaypoint(new_x, new_y, new_z, math.radians(new_theta_x), math.radians(new_theta_y), math.radians(new_theta_z), 0))
+                if waypoint["waypoint"] == self.yaml_file.pos_arg:
+                    new_x = waypoint["linear_x"]
+                    new_y = waypoint["linear_y"]
+                    new_z = waypoint["linear_z"]
+                    new_theta_x = waypoint["angular_x"]
+                    new_theta_y = waypoint["angular_y"]
+                    new_theta_z = waypoint["angular_z"]
+                    goal.trajectory.append(self.FillCartesianWaypoint(new_x, new_y, new_z, math.radians(new_theta_x), math.radians(new_theta_y), math.radians(new_theta_z), 0))
 
         # Call the service
         rospy.loginfo("Sending goal(Cartesian waypoint) to action server...")
@@ -232,7 +237,7 @@ class ExampleWaypointActionClient:
 
             #*******************************************************************************
             # Move the robot to the Home position with an Action
-            success &= self.example_home_the_robot()
+            # success &= self.example_home_the_robot()
             #*******************************************************************************
 
             #*******************************************************************************
